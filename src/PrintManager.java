@@ -39,31 +39,31 @@ public class PrintManager {
         try {
             //After 3 consecutive big company, the printing queue is closed
             while (consecutive == 3) {
-                System.out.println("3 big continuous, no more little adding");
+                System.out.println(little.getName() + ": 3 big continuous, no more little adding");
                 threeConsecutiveBig.await();
             }
 
             // Adding till 3 consecutive big events happened
-            System.out.println("add little print queue");
+            System.out.println(little.getName() + ": add little print queue");
             littlePrintingQueue.add(little);
             System.out.println(littlePrintingQueue);
 
             // wait for big boss
             while (waitForBig) {
-                System.out.println("wait for big");
+                System.out.println(little.getName() + ": wait for big");
                 bigBossAllow.await();
             }
 
             // do print
             littleDoPrint();
 
-            System.out.println("print small");
+            System.out.println(little.getName() + ": print small");
             littlePrintingQueue.poll();
 
             // start new queue
             if (littlePrintingQueue.isEmpty()) {
                 consecutive = 0;
-                System.out.println("start new queue");
+                System.out.println(little.getName() + ": start new queue");
                 threeConsecutiveBig.signalAll();
             }
         } finally {
@@ -82,12 +82,12 @@ public class PrintManager {
         try {
             //After 3 consecutive big company, the printing queue is closed
             while (consecutive == 3) {
-                System.out.println("3 big, little print time");
+                System.out.println(big.getName() + ": 3 big, little print time");
                 waitForBig = false;
                 if (littlePrintingQueue.isEmpty()           // no little and big in the printing queue
                         && bigPrintingQueue.isEmpty()){     // => reset to a new queue
                     consecutive = 0;
-                    System.out.println("new queue");
+                    System.out.println(big.getName() + ": new queue");
                     threeConsecutiveBig.signalAll();
                 }
 
@@ -99,7 +99,7 @@ public class PrintManager {
 
             // big boss are using printer => little should wait
             waitForBig = true;
-            System.out.println("add big print queue");
+            System.out.println(big.getName() + ": add big print queue");
             bigPrintingQueue.add(big);
             System.out.println(bigPrintingQueue);
 
@@ -109,7 +109,7 @@ public class PrintManager {
             //Printing
             bigDoPrint();
 
-            System.out.println("print big");
+            System.out.println(big.getName() + ": print big");
             bigPrintingQueue.poll();
         } finally {
             lock.unlock();
