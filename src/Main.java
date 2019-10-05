@@ -20,7 +20,7 @@ public class Main {
 
         @Override
         public void run() {
-            for (int i=0;i<25;i++){
+            for (int i=0;i<45;i++){
                 Little l = new Little("l"+(i+1),printManager);
                 l.start();
             }

@@ -90,6 +90,7 @@ public class PrintManager {
                     System.out.println("new queue");
                     threeConsecutiveBig.signalAll();
                 }
+
                 // little printing queue is not empty => let them finish
                 bigBossAllow.signalAll();
                 threeConsecutiveBig.await();
